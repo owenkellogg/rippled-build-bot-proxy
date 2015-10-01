@@ -22,7 +22,7 @@ func GithubWebhook(w http.ResponseWriter, req *http.Request, _ httprouter.Params
 
 	request := gorequest.New().TLSClientConfig(tlsConfig)
 
-	url := "https://54.254.176.227/github"
+	url := "https://"+os.Getenv("HOST")+"/github"
 
 	requestBody, _ := ioutil.ReadAll(req.Body)
 
