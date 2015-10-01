@@ -1,0 +1,20 @@
+{
+	"ImportPath": "golang-ripple-bot-proxy",
+	"GoVersion": "go1.3.3",
+	"Deps": [
+		{
+			"ImportPath": "github.com/julienschmidt/httprouter",
+			"Comment": "v1.1-8-gdc1fe66",
+			"Rev": "dc1fe666a058716f962aaabbb3e55fb825266f97"
+		},
+		{
+			"ImportPath": "github.com/parnurzeal/gorequest",
+			"Comment": "v0.2.9",
+			"Rev": "1f4e8242ff000cfd0614a19da3b655be4e347f92"
+		},
+		{
+			"ImportPath": "golang.org/x/net/publicsuffix",
+			"Rev": "ea47fc708ee3e20177f3ca3716217c4ab75942cb"
+		}
+	]
+}
