@@ -26,6 +26,10 @@ func GithubWebhook(w http.ResponseWriter, req *http.Request, _ httprouter.Params
 
 	requestBody, _ := ioutil.ReadAll(req.Body)
 
+  for key, value := range req.Header {
+      fmt.Println("Key:", key, "Value:", value)
+  }
+
   fmt.Println(string(requestBody[:]))
 
 	request.Post(url).
