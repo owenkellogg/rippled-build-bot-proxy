@@ -3,6 +3,8 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
+	"github.com/goamz/goamz/aws"
+	"github.com/goamz/goamz/sqs"
 	"github.com/julienschmidt/httprouter"
 	"github.com/parnurzeal/gorequest"
 	"io/ioutil"
@@ -13,6 +15,12 @@ import (
 
 var (
 	certFile = "./server.crt"
+	auth     = aws.Auth{
+		AccessKey: os.Getenv("AWS_ACCESS_KEY_ID"),
+		SecretKey: os.Getenv("AWS_SECRET_ACCESS_KEY"),
+	}
+	conn      = sqs.New(auth, aws.APSoutheast)
+	queueName = os.Getenv("SQS_QUEUE_PRODUCTION")
 )
 
 func GithubWebhook(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
@@ -22,15 +30,25 @@ func GithubWebhook(w http.ResponseWriter, req *http.Request, _ httprouter.Params
 
 	request := gorequest.New().TLSClientConfig(tlsConfig)
 
-	url := "https://"+os.Getenv("HOST")+"/github"
+	url := "https://" + os.Getenv("HOST") + "/github"
 
 	requestBody, _ := ioutil.ReadAll(req.Body)
 
-  for key, value := range req.Header {
-      fmt.Println("Key:", key, "Value:", value)
-  }
+	for key, value := range req.Header {
+		fmt.Println("Key:", key, "Value:", value)
+	}
 
-  fmt.Println(string(requestBody[:]))
+	fmt.Println(string(requestBody[:]))
+
+	queue, err := conn.GetQueue(queueName)
+
+	resp, err := queue.SendMessage(string(requestBody))
+
+	if err != nil {
+		fmt.Println("Error sending message to queue")
+	} else {
+		fmt.Sprintf("Send message to queue %", resp)
+	}
 
 	request.Post(url).
 		Send(string(requestBody)).
