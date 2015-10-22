@@ -1,1 +1,1 @@
-web: golang-ripple-bot-proxy
+web: rippled-build-bot-proxy
