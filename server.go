@@ -19,7 +19,7 @@ var (
 		AccessKey: os.Getenv("AWS_ACCESS_KEY_ID"),
 		SecretKey: os.Getenv("AWS_SECRET_ACCESS_KEY"),
 	}
-	conn      = sqs.New(auth, aws.APSoutheast)
+	conn      = sqs.New(auth, aws.USWest2)
 	queueName = os.Getenv("SQS_QUEUE_PRODUCTION")
 )
 
