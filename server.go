@@ -1,13 +1,11 @@
 package main
 
 import (
-	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"github.com/goamz/goamz/aws"
 	"github.com/goamz/goamz/sqs"
 	"github.com/julienschmidt/httprouter"
-	"github.com/parnurzeal/gorequest"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -28,18 +26,6 @@ var (
 
 type Body struct {
 	Compare string `json:"compare"`
-}
-
-func postHttp(requestBody []byte) {
-	cert, _ := tls.LoadX509KeyPair(certFile, "")
-	tlsConfig := &tls.Config{Certificates: []tls.Certificate{cert}, InsecureSkipVerify: true}
-
-	request := gorequest.New().TLSClientConfig(tlsConfig)
-
-	url := "https://" + os.Getenv("HOST") + "/github"
-	request.Post(url).
-		Send(string(requestBody)).
-		End()
 }
 
 func GithubWebhook(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
@@ -74,11 +60,11 @@ func GithubWebhook(w http.ResponseWriter, req *http.Request, _ httprouter.Params
 	if err != nil {
 		fmt.Println("Error sending message to queue")
 	} else {
-		fmt.Sprintf("Send message to queue %", resp)
+    fmt.Println(resp)
+		fmt.Sprintf("Send message to queue %", queueName)
 	}
 
 	fmt.Fprintf(w, "Success!\n")
-	go postHttp(requestBody)
 }
 
 func main() {
